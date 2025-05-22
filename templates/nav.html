@@ -1,0 +1,55 @@
+{% load static %}
+ <script src="https://kit.fontawesome.com/bcf6364679.js" crossorigin="anonymous"></script>
+<style>
+    .nav-bar {
+        display: flex;
+        background: orange;
+        padding: 10px;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .nav-item {
+        margin: 0 10px;
+        display: flex;
+        align-items: center;
+        transition: transform 0.3s ease;
+    }
+
+    .cart-label {
+        margin-left: 5px;
+        color: white;
+        font-weight: bold;
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    /* Active state */
+    .nav-bar.active .nav-item:not(.cart) {
+        transform: translateX(-20px);
+    }
+
+    .nav-bar.active .cart-label {
+        opacity: 1;
+        width: auto;
+    }
+</style>
+<div >
+        <div class=" nav-bar justify-content-between">
+            <div>
+                <a href="{% url 'home' %}"><img src="{% static 'images/2-removebg-preview.png' %}" class="h-20 w-20"/></a>
+            </div>
+            <div class="nav-bar d-flex justify-content-end border-rounded">
+                <div class="nav-item mr-3 ">
+                    <a href="{% url 'logout' %}"><i class="fa-solid fa-heart">WIshlist</i></a>
+                </div>
+                <div class="nav-item"><a href="{% url 'profile' %}"><i class="icon">👤 Profile</i></a></div>
+                <div class="nav-item cart" id="cart-btn">
+                    <a href="{% url 'cart' %}"><i class="icon">🛒cart</i></a>
+                    {% comment %} <span class="cart-label">Cart</span> {% endcomment %}
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="" rel="shortcut icon" type="image/x-icon">
+
+<!-- jQuery -->
+<script src="{% static 'js/jquery-2.0.0.min.js' %}" type="text/javascript"></script>
+
+<!-- Bootstrap4 files-->
+<script src="{% static 'js/bootstrap.bundle.min.js' %}" type="text/javascript"></script>
+<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css"/>
+
+<!-- Font awesome 5 -->
+<link href="{% static 'fonts/fontawesome/css/all.min.css' %}" type="text/css" rel="stylesheet">
+
+<!-- custom style -->
+<link href="{% static 'css/ui.css' %}" rel="stylesheet" type="text/css"/>
+<link href="{% static 'css/responsive.css' %}" rel="stylesheet" media="only screen and (max-width: 1200px)" />
+  <title>Document</title>
+</head>
+
+<style>
+
+    .btn-orange {
+      background: linear-gradient(90deg, #ff7e5f, #feb47b);
+      color: white;
+      border: none;
+    }
+    .btn-orange:hover {
+      background: linear-gradient(90deg, #feb47b, #ff7e5f);
+    }
+
+</style>
+
+<body>
+<section class="section-content padding-y">
+
+<!-- ============================ COMPONENT REGISTER   ================================= -->
+	<div class="card mx-auto" style="max-width:520px; margin-top:40px;">
+    <article class="card-body">
+
+        {% include 'alerts.html' %}
+        <header class="mb-4"><h4 class="card-title">Sign up</h4></header>
+        <form action="{% url 'register' %}" method='post' novalidate>
+
+            {% csrf_token %}
+
+            <!-- Display general form errors like password mismatch -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="form-row">
+                <div class="col form-group">
+                    <label>First name</label>
+                    {{ form.first_name }}
+                    {% for error in form.first_name.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="col form-group">
+                    <label>Last name</label>
+                    {{ form.last_name }}
+                    {% for error in form.last_name.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Email</label>
+                    {{ form.email }}
+                    {% for error in form.email.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Phone Number</label>
+                    {{ form.phone_number }}
+                    {% for error in form.phone_number.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Create password</label>
+                    {{ form.password }}
+                    {% for error in form.password.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Repeat password</label>
+                    {{ form.confirm_password }}
+                    {% for error in form.confirm_password.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-orange btn-block"> Register </button>
+            </div>
+        </form>
+    </article>
+</div>
+<p class="text-center mt-4">Have an account? <a href="">Log In</a></p>
+
+    <br><br>
+<!-- ============================ COMPONENT REGISTER  END.// ================================= -->
+
+
+</section>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kesar Mango Cards</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-yellow-50 to-yellow-100 min-h-screen flex flex-col items-center py-10">
+    
+    <!-- Products List Section -->
+
+  <h1 class="text-4xl font-bold text-orange-600 mb-10"> Kesar Mango Varieties</h1>
+  
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-6 w-full max-w-6xl">
+    {% for product,colors in products %}
+    <!-- Card 1 -->
+    <div class="{{ colors }} rounded-2xl shadow-md p-6 flex flex-col items-center hover:shadow-xl transition">
+      <img src="{{ product.image.url }}" alt="Sindhura 4pc" class="w-36 h-36 object-contain mb-4 hover:scale-105 transition-transform duration-300" />
+      <a href="{{ product.get_url }}"><h2 class="text-lg font-semibold text-gray-800">{{ product.Product_name}}</h2></a>
+      <p class="text-orange-500 font-medium">{{ product.description}}/{{ product.Price }}</p>
+      <div class="relative bottom-0 right-0 top-6 left-24">
+          <div
+            class="w-14 h-14 bg-orange-500 rounded-tl-[20px] rounded-br-2xl  flex items-center justify-center">
+            <a href="{% url 'add_cart' product.id %}" class="text-white text-xl">🛒</a>
+          </div>
+        </div>
+    </div>
+    {% endfor %}
+  </div>
+  <!-- End Section -->
+
+</body>
+</html>
