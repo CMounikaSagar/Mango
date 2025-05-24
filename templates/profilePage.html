@@ -26,94 +26,48 @@
     </style>
 </head>
 
-<body class="bg-gray-100 py-5">
-    <div class="container md:w-1/2 mx-auto bg-white p-6 rounded-xl shadow-lg">
-        <div class="flex items-center mb-6">
-            <button class="text-xl font-semibold"><i class="fa-solid fa-less-than"></i></button>
-            <div class="flex-grow text-center">
-                <p class="text-3xl font-semibold">My Profile</p>
-            </div>
-        </div>
+<body class="bg-gray-100 ">
+    {% include 'nav.html' %}
+    <section class="section-conten padding-y bg my-5">
 
-        <!-- Personal Section -->
-        <div onclick="showSection('personal')" class="cursor-pointer mb-3 p-4 bg-gray-100 rounded-lg shadow-md flex justify-between">
-            <p class="text-lg font-semibold">Personal Details</p>
-            <i class="fa-solid fa-chevron-down"></i>
-        </div>
-        <div id="personal" class="section-content active mb-4 p-4 bg-white border rounded-lg shadow-sm">
-            <div class="flex items-center gap-4">
-                <img src="{{ user_profile.profile_picture.url}}" class="w-24 h-24 rounded-full bg-gray-200" />
-                <div>
-                    <p class="py-1 underline">{{ user.first_name }} {{ user.last_name }}</p>
-                    <p class="py-1 underline">{{ user.email }}</p>
-                    <p class="py-1 underline">{{ user.phone_number }}</p>
-                </div>
-            </div>
-            <div class="text-end mt-3">
-                <a href="{% url 'edit_profile' %}" class="text-orange-500 font-semibold">Edit</a>
-            </div>
-        </div>
-
-        <!-- Orders Section -->
-        <div onclick="showSection('orders')" class="cursor-pointer mb-3 p-4 bg-gray-100 rounded-lg shadow-md flex justify-between">
-            <p class="text-lg font-semibold">Orders</p>
-            <i class="fa-solid fa-chevron-down"></i>
-        </div>
-       
-        <div id="orders" class="section-content mb-4 p-4 bg-white border rounded-lg shadow-sm">
-           {% if orders %}
-                {% for order in orders %}
-                <div class="mb-3 border-b pb-2">
-                    <p><strong>Order ID:</strong> {{ order.order_number }}</p>
-                    <p><strong>Total:</strong> ₹{{ order.order_total }}</p>
-                    <p><strong>Status:</strong> {{ order.status }}</p>
-                </div>
-                {% endfor %}
-            {% else %}
-                <p>No orders found.</p>
-            {% endif %}
-        </div>
-
-        
-
-        <!-- Reviews Section -->
-        <div onclick="showSection('reviews')" class="cursor-pointer mb-3 p-4 bg-gray-100 rounded-lg shadow-md flex justify-between">
-            <p class="text-lg font-semibold">Pending Reviews</p>
-            <i class="fa-solid fa-chevron-down"></i>
-        </div>
-        <div id="reviews" class="section-content mb-4 p-4 bg-white border rounded-lg shadow-sm">
-            <p>No pending reviews.</p>
-        </div>
-
-        <!-- FAQ -->
-        <div onclick="showSection('faq')" class="cursor-pointer mb-3 p-4 bg-gray-100 rounded-lg shadow-md flex justify-between">
-            <p class="text-lg font-semibold">FAQs</p>
-            <i class="fa-solid fa-chevron-down"></i>
-        </div>
-        <div id="faq" class="section-content mb-4 p-4 bg-white border rounded-lg shadow-sm">
-            <p>How do I change my password?</p>
-            <p>How can I cancel an order?</p>
-        </div>
-
-        <!-- Help -->
-        <div onclick="showSection('help')" class="cursor-pointer mb-3 p-4 bg-gray-100 rounded-lg shadow-md flex justify-between">
-            <p class="text-lg font-semibold">Help</p>
-            <i class="fa-solid fa-chevron-down"></i>
-        </div>
-        <div id="help" class="section-content mb-4 p-4 bg-white border rounded-lg shadow-sm">
-            <p>Contact support at support@example.com</p>
-        </div>
-
-        
-    </div>
-
-    <script>
-        function showSection(id) {
-            const sections = document.querySelectorAll(".section-content");
-            sections.forEach(sec => sec.classList.remove("active"));
-            document.getElementById(id).classList.add("active");
-        }
-    </script>
+<div class="container">
+	<div class="row">
+	{% include 'dashboard_aside.html' %}
+	<main class="col-md-9">
+		<article class="card">
+		<header class="card-header">
+			<h2 class="d-inline-block mr-3">Login as:{{ user.first_name }}</h2>
+			
+		</header>
+		<div class="card-body">
+			<div class="row"> 
+				<div class="col md-6 ">
+					<div class="card" >
+						<div class="card-body">
+							<h5 class="card-title">Total Orders</h5>
+							<h4>{{ orders_count }}</h4>
+							<a href="{% url 'myorders' %}" >View Orders</a>
+						</div>
+					</div>
+				</div>
+				<div class="col md-6 ">
+					<div class="card" >
+						<div class="card-body">
+							<img src="{{ user_profile.profile_picture.url }}" class="w-25"/>
+							<p>{{ user.email }}</p>
+							<p>{{ user.phone_number }}</p>
+						</div>
+					</div>
+				</div>
+				
+			</div> <!-- row.// -->
+		</div> <!-- card-body .// -->
+		
+		</article> <!-- order-group.// --> 
+	</main>
+</div> <!-- row.// -->
+</div>
+</section>    {% include 'footer.html' %}
 </body>
 
 </html>

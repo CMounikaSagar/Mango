@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +19,7 @@
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/bcf6364679.js" crossorigin="anonymous"></script>
     
 
 </head>
@@ -60,33 +62,31 @@
     
 
 </style>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('slide-in');
-                    observer.unobserve(entry.target);  // Only trigger once
-                }
-            });
-        }, {
-            threshold: 0.3 // Trigger when 30% of element is visible
-        });
-
-        const categoryList = document.querySelector('.category-list');
-        if (categoryList) {
-            observer.observe(categoryList);
-        }
-    });
-</script>
-</head>
-<body>
-	{% include 'nav.html' %}
-
-	{% block 'content' %}
-	
-	{% endblock 'content' %}
-
-	{% include "footer.html" %}
+<body class="bg-body-tertiary bg-orange">
+    {% include 'nav.html' %}
+<div class="bg-gradient-to-r from-yellow-50 to-yellow-100 min-h-screen flex flex-col items-center py-10">
+  <h1 class="text-4xl font-bold text-orange-600 mb-10"> Kesar Mango Varieties</h1>
+  
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-6 w-full max-w-6xl">
+    {% for item,colors in wishlist_item %}
+    <!-- Card 1 -->
+    <div class="{{ colors }} rounded-2xl shadow-md p-6 flex flex-col items-center hover:shadow-xl transition">
+      <div class=" static ml-auto">
+        <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow">
+            <a href="{% url 'remove_wishlist' item.product.id %}" class="text-danger"><i class="fa-solid fa-heart"></i></a>
+        </div>
+      </div>
+      <img src="{{ item.product.image.url }}" alt="Sindhura 4pc" class="w-36 h-36 object-contain mb-4 hover:scale-105 transition-transform duration-300" />
+      <a href="{{ item.product.get_url }}" class="text-decoration-none"><h2 class="text-lg font-semibold text-decoration-none text-gray-800">{{ item.product.Product_name}}</h2></a>
+      <p class="text-orange-500 font-medium">{{ item.product.description}}/{{ item.product.Price }}</p>
+      <div class="relative bottom-0 right-0 top-6 left-24">
+          <div
+            class="w-14 h-14 bg-orange-500 rounded-tl-[20px] rounded-br-2xl  flex items-center justify-center">
+            <a href="{% url 'add_cart' item.id %}" class="text-white text-xl text-decoration-none">🛒</a>
+          </div>
+        </div>
+    </div>
+    {% endfor %}
+  </div>
 </body>
 </html>

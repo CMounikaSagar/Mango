@@ -29,10 +29,14 @@
         margin: 0;
         box-sizing: border-box;
     }
+    body{
+        background-color : rgba(255, 166, 69, 1);
+    }
 </style>
 
 <body class="bg-body-tertiary">
-    <div class="row">
+    {% include 'nav.html' %}
+    <div class="row my-5">
     <aside class="col-lg-8">
         <div class="card">
             <div class="card-header">
@@ -128,7 +132,7 @@
 
 
 </div> <!-- row.// -->
-
+{% include 'footer.html' %}
 </body>
 
 </html>

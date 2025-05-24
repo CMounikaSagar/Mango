@@ -23,6 +23,7 @@
 
 </head>
 <body>
+    {% include 'nav.html' %}
     <div class="container mt-5">
     <h1 class="text-center text-success text-lg fw-semibold">Your Order is confirmed Successfully </h1><br>
     <p class="text-center"> Thank you for shopping with us Your order will reach you in 10 mins</p>
@@ -34,6 +35,6 @@
 		<a href="{% url 'home' %}" class="btn  btn-outline-warning mb-4 ">Back to home</a>
 	</div>
 </div>
-
+{% include 'footer.html' %}
 </body>
 </html>

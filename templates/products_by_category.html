@@ -5,30 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kesar Mango Cards</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/bcf6364679.js" crossorigin="anonymous"></script>
 </head>
-<body class="bg-gradient-to-r from-yellow-50 to-yellow-100 min-h-screen flex flex-col items-center py-10">
-    
+<style>
+  
+</style>
+<body >
+    {% include 'nav.html' %}
     <!-- Products List Section -->
-
+  <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 min-h-screen flex flex-col items-center py-10">
   <h1 class="text-4xl font-bold text-orange-600 mb-10"> Kesar Mango Varieties</h1>
   
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-6 w-full max-w-6xl">
     {% for product,colors in products %}
     <!-- Card 1 -->
     <div class="{{ colors }} rounded-2xl shadow-md p-6 flex flex-col items-center hover:shadow-xl transition">
+      <div class=" static ml-auto">
+        <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow">
+            <a href="{% url 'add_wishlist' product.id %}"><i class="fa-regular fa-heart"></i></a>
+        </div>
+      </div>
       <img src="{{ product.image.url }}" alt="Sindhura 4pc" class="w-36 h-36 object-contain mb-4 hover:scale-105 transition-transform duration-300" />
-      <a href="{{ product.get_url }}"><h2 class="text-lg font-semibold text-gray-800">{{ product.Product_name}}</h2></a>
+      <a href="{{ product.get_url }}" class="text-decoration-none"><h2 class="text-lg font-semibold text-decoration-none text-gray-800">{{ product.Product_name}}</h2></a>
       <p class="text-orange-500 font-medium">{{ product.description}}/{{ product.Price }}</p>
       <div class="relative bottom-0 right-0 top-6 left-24">
           <div
             class="w-14 h-14 bg-orange-500 rounded-tl-[20px] rounded-br-2xl  flex items-center justify-center">
-            <a href="{% url 'add_cart' product.id %}" class="text-white text-xl">🛒</a>
+            <a href="{% url 'add_cart' product.id %}" class="text-white text-xl text-decoration-none">🛒</a>
           </div>
         </div>
     </div>
     {% endfor %}
   </div>
   <!-- End Section -->
-
+</div>
+{% include 'footer.html' %}
 </body>
 </html>
