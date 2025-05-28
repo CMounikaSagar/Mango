@@ -24,23 +24,26 @@ def add_cart(request, product_id):
         cart_item, created = CartItem.objects.get_or_create(
             product=product,
             user=request.user,
-            cart=cart,
-            defaults={'quantity': 1}
+            defaults={'cart':cart,'quantity': 1}
         )
-        if not created:
-            cart_item.quantity += 1
-            cart_item.save()
+        
     else:
+        # for unauthenticated users
         cart_item, created = CartItem.objects.get_or_create(
             product=product,
             cart=cart,
             user=None,
             defaults={'quantity': 1}
         )
-        if not created:
-            cart_item.quantity += 1
-            cart_item.save()
-
+    if not created:
+        # If cart lready exists just increase the quantity
+        cart_item.quantity += 1
+    else:
+        # If newly created and user is authenticated, assign the cart
+        if request.user.is_authenticated:
+            cart_item.cart = cart
+        
+    cart_item.save()
     return redirect('cart')
   
         

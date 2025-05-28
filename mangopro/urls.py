@@ -21,6 +21,7 @@ from mangoapp.views import *
 from category.views import *
 from store.views import *
 from orders.views import *
+from chatbot.views import *
 from cart.views import *
 from django.conf.urls.static import static
 from django.conf import settings
@@ -54,8 +55,12 @@ urlpatterns = [
     path('edit_profile/',editprofile,name='edit_profile'),
     path('myorders/',myorders,name='myorders'),
     # path('wishlist/<int:category_id>/',toggle_wishlist,name='wishlist'),
-    # path('request/', request_otp, name='request_otp'),
-    # path('verify/', verify_otp, name='verify_otp'),
+    path('reset_password/', reset_password, name='reset_password'),
+    path('forgot_password/', forgot_password_request, name='forgot_password'),
+    path('verify/', verify_otp, name='verify_otp'),
+    path('search/', search, name='search'),
+    path('change_password/', change_password, name='change_password'),
+    path('chatbot_response/', chatbot_response, name='chatbot_response'),
     
     
 ]+ static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)

@@ -23,11 +23,21 @@
 
 </head>
 <style>
-    * {
-        font-family: 'Montserrat';
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
+    
+  @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+  *{
+
+  font-family: "Merriweather", serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+  }
+  .footer{
+        background-image: linear-gradient(to bottom,rgba(255, 133, 0, 1), rgba(255, 166, 69, 0.7));
+        
     }
     body{
         background-color : rgba(255, 166, 69, 1);
@@ -82,7 +92,7 @@
                                                 <div class="aside"><img src="{{ cart_item.product.image.url }}" class="w-25"></div>
                                                 <figcaption class="info">
                                                     <a href="{{ cart_item.product.get_url }}" class="title text-dark">{{ cart_item.product.Product_name}}</a>
-                                                    <p class="text-muted small">Color: 25 Mpx <br> Price: {{ cart_item.product.Price}}</p>
+                                                    <p class="text-muted small"> <br> Price: {{ cart_item.product.Price}}</p>
                                                 </figcaption>
                                             </figure>
                                         </td>
@@ -91,9 +101,9 @@
                                             <label for = "">{{cart_item.quantity }}</label>
                                         </td>
                                         <td> 
-                                            <div class="price-wrap"> 
-                                                <var class="price">${{ cart_item.sub_total}}</var> 
-                                                <small class="text-muted"> ${{ cart_item.product.Price}} </small> 
+                                            <div class="price-wrap d-flex flex-column"> 
+                                                <var class="price">₹{{ cart_item.sub_total}}</var> 
+                                                <small class="text-muted"> ₹{{ cart_item.product.Price}} </small> 
                                             </div> <!-- price-wrap .// -->
                                         </td>
                                     </tr>
@@ -122,7 +132,7 @@
                 </dl>
                 <hr>
                 <p class="text-center mb-3">
-                    <img src="./images/misc/payments.png" height="26">
+                    <img src="{% static 'images/misc/payments.png' %}" height="26">
                 </p>
                 <a href="{% url 'place_order_1' %}" class="btn btn-primary btn-block"> Place Order </a>
             </div> <!-- card-body.// -->

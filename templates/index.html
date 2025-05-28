@@ -19,16 +19,20 @@
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/bcf6364679.js" crossorigin="anonymous"></script>
     
 
 </head>
 <style>
-    * {
-        font-family: 'Montserrat';
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }
+    
+  @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+  *{
+
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: italic;
+  }
     /* Initial state */
    /* Initially hidden with transform */
 .hidden-slide {
@@ -54,11 +58,46 @@
         transform: rotate(-15deg);
     }
     }
+    .footer{
+        background-image: linear-gradient(to bottom,rgba(255, 133, 0, 1), rgba(255, 166, 69, 0.7));
+        
+    }
 
     .product_image:hover {
     animation: tilt 0.5s  ease-in-out;
     }
-    
+      .floating-image {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            {% comment %} box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); {% endcomment %}
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 999;
+        }
+
+        .floating-image:hover {
+            transform: scale(1.1);
+        }
+        .chat-label {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background-color: #ffcc00;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            display: none;
+            font-weight: bold;
+            z-index: 999;
+        }
+        .head-text{
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        }
 
 </style>
 <script>
@@ -79,18 +118,19 @@
             observer.observe(categoryList);
         }
     });
+    
 </script>
 
 
-<body class="bg-body-tertiary bg-orange">
+<body class="bg-body-tertiary">
     {% include 'nav.html' %}
     <div class="px-5 my-3 md:p-0 ">
         <div class="md:flex justify-center items-center mt-2">
             <div class="text-5xl font-bold">
-                <p>Delicious
+                <h1><b class="head-text">Delicious
                     <span class="text-orange-500"> Mangoes</span> for
-                    you
-                </p>
+                    you</b>
+                </h1>
             </div>
             
         </div>
@@ -142,7 +182,7 @@
                             alt="Alphonso Mango">
                     </a>
                     <h2 class="text-orange-600 font-semibold text-lg mt-4">{{ category.category_name }}</h2>
-                    <p class="text-orange-500 text-xl font-semibold">100
+                    <p class="text-orange-500 text-xl font-semibold">₹ 100
                         <span class="text-black text-base font-normal">/kg</span>
                     </p>
                     </div>
@@ -156,30 +196,11 @@
         </div>
         
     </div>
-    <footer class="section-footer py-6 px-3 border-top">
-        <div class="container">
-            <section class="footer-bottom row">
-                <div class="col-md-2">
-                    <p class="text-muted"> &copy 2019 Company name </p>
-                </div>
-                <div class="col-md-8 text-md-center">
-                    <span class="px-2">info@pixsellz.io</span>
-                    <span class="px-2">+879-332-9375</span>
-                    <span class="px-2">Street name 123, Avanue abc</span>
-                </div>
-                <div class="col-md-2 text-md-right text-muted">
-                    <i class="fab fa-lg fa-cc-visa"></i>
-                    <i class="fab fa-lg fa-cc-paypal"></i>
-                    <i class="fab fa-lg fa-cc-mastercard"></i>
-                </div>
-            </section>
-        </div><!-- //container -->
-    </footer>
-    <script>
-        function navigateTo(name) {
-            window.location.href = name + '.html';
-        }
-    </script>
+    {% include 'mango.html' %}
+    <Footer>
+     {% include 'footer.html' %}
+
+    </Footer>
 </body>
 
 </html>

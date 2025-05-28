@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from django.contrib.messages import constants as messages
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,7 +44,8 @@ INSTALLED_APPS = [
     'category',
     'store',
     'cart',
-    'orders'
+    'orders',
+    'chatbot'
 ]
 
 MIDDLEWARE = [
@@ -69,6 +71,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processor.counter',
+                'store.context_processor.wishlist_count',
             ],
         },
     },
@@ -132,6 +135,10 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR/'media'
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',  # maps 'error' to 'danger'
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

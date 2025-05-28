@@ -12,10 +12,23 @@
     <script src="https://kit.fontawesome.com/bcf6364679.js" crossorigin="anonymous"></script>
 
     <style>
-        * {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+        *{
+
+        font-family: "Merriweather", serif;
+        font-optical-sizing: auto;
+        font-weight: <weight>;
+        font-style: normal;
+        font-variation-settings:
+            "wdth" 100;
         }
 
+        .footer{
+        background-image: linear-gradient(to bottom,rgba(255, 133, 0, 1), rgba(255, 166, 69, 0.7));
+        
+        }
         .section-content {
             display: none;
         }
@@ -27,7 +40,7 @@
 </head>
 <body class="bg-gray-100 ">
     {% include 'nav.html' %}
-    <section class="section-conten padding-y bg">
+    <section class="section-conten padding-y bg my-5">
 
     <div class="container">
         <div class="row">
@@ -71,5 +84,6 @@
         </div> <!-- row.// -->
     </div>
 </section>
+{% include 'footer.html' %}
 </body>
 </html>

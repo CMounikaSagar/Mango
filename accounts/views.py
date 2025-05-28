@@ -1,6 +1,7 @@
 import requests
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import *
+from mangoapp.models import *
 from cart.views import _cart_id
 from orders.models import *
 from cart.models import *
@@ -9,6 +10,8 @@ from accounts.models import *
 from django.contrib import messages
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
+import random
 from django.conf import settings
 
 from django.contrib.auth import get_user_model
@@ -81,7 +84,7 @@ def register_user(request):
 @login_required(login_url='login')
 def logout_user(request):
     logout(request)
-    messages.success(request,'logout successfully')
+    # messages.success(request,'logout successfully')
     return redirect('login')
 
 def editprofile(request):
@@ -104,66 +107,93 @@ def editprofile(request):
     }
     return render(request,'edit_profile.html',context)
 
-def forgot_password_phone(request):
+def forgot_password_request(request):
     if request.method == 'POST':
-        phone = request.POST.get('phone')  # Get the phone number from form
+        phone = request.POST.get('phone', '').strip()
+        normalized_phone = phone[-10:]  # take last 10 digits
+        print("User entered phone:", phone)
+        print("Normalized phone:", normalized_phone)
 
         try:
-            user = User.objects.get(phone_number=phone)  # Check if user exists
-            request.session['reset_phone'] = phone  # Store phone in session
+            user = User.objects.get(phone_number=phone)
+            print(user)
+            otp = str(random.randint(1000, 9999))
 
-            # Step 1: Send OTP via 2Factor
-            response = requests.get(
-                f"https://2factor.in/API/V1/{settings.TWO_FACTOR_API_KEY}/SMS/{phone}/AUTOGEN"
-            )
-            data = response.json()
+            # Save OTP
+            OTP.objects.create(phone_number=phone, otp_code=otp)
 
-            if data['Status'] == 'Success':
-                request.session['session_id'] = data['Details']  # Save OTP session ID
-                return redirect('verify_otp_phone')  # Redirect to OTP input page
-            else:
-                messages.error(request, 'OTP sending failed.')
+            # Simulate sending OTP (log it or show on screen)
+            print(f"OTP for {phone} is {otp}")  # Use logging in real apps
+            request.session['phone'] = phone
+            messages.info(request, f"OTP sent to {phone}. (Simulated)")
+
+            return redirect('verify_otp')
         except User.DoesNotExist:
-            messages.error(request, 'Phone number not found.')
-
+            messages.error(request, "Phone number not found.")
     return render(request, 'forgot_password.html')
 
-def verify_otp_phone(request):
+
+def verify_otp(request):
     if request.method == 'POST':
-        otp_input = request.POST.get('otp')  # Get OTP entered by user
-        session_id = request.session.get('session_id')  # Get session ID from Step 1
+        otp1 = request.POST.get('otp1')
+        otp2 = request.POST.get('otp2')
+        otp3 = request.POST.get('otp3')
+        otp4 = request.POST.get('otp4')
+        # otp5 = request.POST.get('otp5')
+        # otp6 = request.POST.get('otp6')
 
-        # Step 2: Verify OTP with 2Factor API
-        verify_url = f"https://2factor.in/API/V1/{settings.TWO_FACTOR_API_KEY}/SMS/VERIFY/{session_id}/{otp_input}"
-        response = requests.get(verify_url)
-        data = response.json()
+        entered_otp = f"{otp1}{otp2}{otp3}{otp4}"
+        phone = request.session.get('phone')
 
-        if data['Status'] == 'Success':
-            return redirect('reset_password_phone')  # Proceed to reset form
-        else:
-            messages.error(request, 'Invalid OTP.')
-    
+        try:
+            otp_entry = OTP.objects.filter(phone_number=phone).latest('created_at')
+            if otp_entry.otp_code == entered_otp and otp_entry.is_valid():
+                request.session['otp_verified'] = True
+                return redirect('reset_password')
+            else:
+                messages.error(request, "Invalid or expired OTP.")
+        except OTP.DoesNotExist:
+            messages.error(request, "OTP not found.")
     return render(request, 'verify_otp.html')
 
-def reset_password_phone(request):
-    phone = request.session.get('reset_phone')  # Get phone from session
-    if not phone:
-        return redirect('forgot_password_phone')  # Safety check
 
-    user = User.objects.get(phone_number=phone)  # Get user by phone
+def reset_password(request):
+    if not request.session.get('otp_verified'):
+        return redirect('forgot_password')
 
     if request.method == 'POST':
-        password = request.POST.get('password')
-        confirm = request.POST.get('confirm_password')
+        new_password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
 
-        if password == confirm:
-            user.set_password(password)  # Securely update password
-            user.save()
-            messages.success(request, 'Password reset successful.')
-            return redirect('login')  # Go to login page
+        if new_password != confirm_password:
+            messages.error(request, "Passwords do not match.")
         else:
-            messages.error(request, 'Passwords do not match.')
+            phone = request.session.get('phone')
+            user = User.objects.get(phone_number=phone)
+            user.password = make_password(new_password)
+            user.save()
 
-    return render(request, 'reset_password_phone.html')
+            # Clear session
+            request.session.flush()
+            messages.success(request, "Password reset successful.")
+            return redirect('login')
+    return render(request, 'reset_password.html')
 
-
+def change_password(request):
+    if request.method == 'POST':
+        current_password = request.POST['old_password']
+        new_password = request.POST['new_password']
+        confirm_new_password = request.POST['confirm_new_password']
+        
+        user = Account.objects.get(username__exact = request.user.username)
+        
+        if new_password == confirm_new_password:
+            success = user.check_password(current_password)
+            if success:
+                user.set_password(new_password) 
+                user.save()
+                messages.success(request,'Password Updated successfull')
+                return redirect('change_password')
+            else:
+                messages.error(request,'please enter valid current password')
+    return render(request,'change_password.html')

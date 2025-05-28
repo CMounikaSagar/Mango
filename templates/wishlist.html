@@ -24,11 +24,22 @@
 
 </head>
 <style>
-    * {
-        font-family: 'Montserrat';
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
+    
+  @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+  *{
+
+  font-family: "Merriweather", serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+  }
+  .footer{
+        background-image: linear-gradient(to bottom,rgba(255, 133, 0, 1), rgba(255, 166, 69, 0.7));
+        width:100%;
+        margin-top:30px
     }
     /* Initial state */
    /* Initially hidden with transform */
@@ -64,8 +75,8 @@
 </style>
 <body class="bg-body-tertiary bg-orange">
     {% include 'nav.html' %}
-<div class="bg-gradient-to-r from-yellow-50 to-yellow-100 min-h-screen flex flex-col items-center py-10">
-  <h1 class="text-4xl font-bold text-orange-600 mb-10"> Kesar Mango Varieties</h1>
+<div class="bg-gradient-to-r from-yellow-50 to-yellow-100 min-h-screen flex flex-col items-center pt-10">
+  <h1 class="text-4xl font-bold text-orange-600 mb-10"> Your Wishlist</h1>
   
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-6 w-full max-w-6xl">
     {% for item,colors in wishlist_item %}
@@ -87,6 +98,10 @@
         </div>
     </div>
     {% endfor %}
-  </div>
+</div>
+
+
+{% include 'footer.html' %}
+{% include 'mango.html' %}
 </body>
 </html>

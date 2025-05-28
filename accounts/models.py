@@ -1,6 +1,23 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.utils.translation import gettext_lazy as _
 from django.utils.html import mark_safe
+from django.core.validators import (
+    RegexValidator, MinLengthValidator, MaxLengthValidator, EmailValidator
+)
+import re
+from django.core.exceptions import ValidationError
+
+
+def validate_name(value):
+    if not value.isalpha():
+        raise ValidationError('Name must contain only alphabetic characters.')
+def validate_email(value):
+        """Ensure email follows the standard format and ends with .com."""
+        email_pattern = r'^[a-zA-Z0-9._%+-]+@gmail+\.com$'
+        
+        if not re.match(email_pattern, value):
+            raise ValidationError(_("Enter a valid email address "))
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, phone_number, username, email, first_name, last_name, password=None):
@@ -38,11 +55,40 @@ class CustomUserManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
-    first_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
-    username = models.CharField(max_length=200, unique=True)
-    email = models.EmailField(max_length=100)
-    phone_number = models.CharField(max_length=10, unique=True)
+    first_name = models.CharField(
+        max_length=200,
+        validators=[
+        validate_name,
+        MinLengthValidator(3, "First name must be at least 2 characters long."),
+        ])
+    last_name = models.CharField(
+        max_length=200,
+        validators=[
+            validate_name,
+            MinLengthValidator(4,"Last Name should be atleast 4 letter long")
+        ])
+    username = models.CharField(
+        max_length=200, unique=True,
+        validators=[
+            RegexValidator(
+                regex=r'^[a-zA-Z0-9_]+$',
+                message="Username must contain only letters, numbers, and underscores."
+            ),
+            MinLengthValidator(4, "Username must be at least 4 characters long.")
+        ]
+        )
+    
+    email = models.EmailField(max_length=100,unique=True,
+                              validators=[
+            validate_email
+        ])
+    phone_number = models.CharField(max_length=10 , unique=True , 
+                                    validators=[
+            RegexValidator(
+                regex=r'^\d{10}$',
+                message="Phone number must be exactly 10 digits."
+            )
+        ])
 
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True)
