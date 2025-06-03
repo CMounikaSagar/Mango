@@ -41,6 +41,8 @@
     transition: all 0.8s ease-out;
 }
 
+
+
 /* When in view */
 .slide-in {
     opacity: 1;
@@ -97,6 +99,20 @@
         }
         .head-text{
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+            position: absolute;
+            top: 20%;  /* Center vertically */
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            {% comment %} background-color: rgba(0, 0, 0, 0.5); /* Optional: semi-transparent background */ {% endcomment %}
+            padding: 10px;
+            border-radius: 8px;
+        }
+        #carouselExampleCaptions{
+            position: relative;
+            
         }
 
 </style>
@@ -124,17 +140,12 @@
 
 <body class="bg-body-tertiary">
     {% include 'nav.html' %}
-    <div class="px-5 my-3 md:p-0 ">
-        <div class="md:flex justify-center items-center mt-2">
-            <div class="text-5xl font-bold">
-                <h1><b class="head-text">Delicious
-                    <span class="text-orange-500"> Mangoes</span> for
-                    you</b>
-                </h1>
-            </div>
+    <div class="  md:p-0 ">
+        
             
-        </div>
-        <div class="carousel slide mt-3 w-100 h-[500px] mx-auto rounded-3xl" id="carouselExampleCaptions" data-bs-ride="carousel">
+            
+        
+        <div class="carousel slide w-[1500px] h-[650px]  " id="carouselExampleCaptions" data-bs-ride="carousel">
             <div class="carousel-indicators">
                 <button class="active" data-bs-slide-to="0" data-bs-target="#carouselExampleCaptions" type="button"
                     aria-current="true" aria-label="Slide 1"></button>
@@ -145,13 +156,13 @@
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active ">
-                    <img class="d-block w-[2000px] h-[500px] rounded-3xl" src="{% static 'images/mango.png' %}" alt="...">
+                    <img class="d-block w-[1520px]  " src="{% static 'images/mango.png' %}" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-[2000px] h-[500px] rounded-3xl" src="{% static 'images/197.jpg' %}" alt="...">
+                    <img class="d-block w-[1500px] h-[650px]" src="{% static 'images/197.jpg' %}" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-[2000px] h-[500px] rounded-3xl" src="{% static 'images/50460480.jpg' %}" alt="...">
+                    <img class="d-block w-[1500px] h-[650px]" src="{% static 'images/50460480.jpg' %}" alt="...">
                 </div>
             </div>
             <button class="carousel-control-prev" data-bs-slide="prev" data-bs-target="#carouselExampleCaptions"
@@ -165,6 +176,12 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
+        {% comment %} <div class="text-5xl font-bold head-text ">
+                <h1><b class="">Delicious
+                    <span class="text-orange-500"> Mangoes</span> for
+                    you</b>
+                </h1>
+            </div> {% endcomment %}
         <!-- RECOMMENDED -->
         {% comment %} {% if categories %} {% endcomment %}
         <div class="md:flex  items-center mt-4">

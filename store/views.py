@@ -78,7 +78,7 @@ def remove_wishlist(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     Wishlist_object = get_object_or_404(Wishlist,user=request.user, product=product)
     Wishlist_object.delete()
-    return redirect(request.META.get('HTTP_REFERER', '/store/'))  
+    return redirect(request.META.get('HTTP_REFERER'))  
 
 @login_required(login_url='login')
 def wishlist_view(request):

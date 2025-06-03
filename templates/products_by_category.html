@@ -43,7 +43,16 @@
       <div class="relative bottom-0 right-0 top-6 left-24">
           <div
             class="w-14 h-14 bg-orange-500 rounded-tl-[20px] rounded-br-2xl  flex items-center justify-center">
-            <a href="{% url 'add_cart' product.id %}" class="text-white text-xl text-decoration-none">🛒</a>
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'add_cart' product.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn ">🛒 </button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}?next={{ request.path }}" class="btn ">
+                    🛒 
+                </a>
+            {% endif %}
           </div>
         </div>
     </div>

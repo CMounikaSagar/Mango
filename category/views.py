@@ -23,4 +23,4 @@ def products_by_category(request,category_id):
         'category':category,
         'products':product_data,
     }
-    return render(request,'products_by_category.html',context)
+    return render(request,'modal.html',context)

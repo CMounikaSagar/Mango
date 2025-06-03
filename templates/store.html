@@ -45,6 +45,7 @@
     
 </style>
 
+
 <body class="bg-body-tertiary">
     {% include 'nav.html' %}
     <section class="section-pagetop bg">
@@ -80,7 +81,60 @@
 		<div class="{{ bg_color }} rounded-2xl shadow-lg p-6 flex flex-col items-center hover:shadow-xl transition">
             <div class=" static ml-auto">
                 <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow">
-                    <a href="{% if product.id in wishlist_items %}{% url 'remove_wishlist' product.id %}{% else %}{% url 'add_wishlist' product.id %}{% endif %}" class="{% if product.id in wishlist_items %} text-danger {% else %} text-warning {% endif %}"><i class="fa-solid fa-heart"></i></a>
+                    {% if user.is_authenticated %}
+                        <a href="{% if product.id in wishlist_items %}{% url 'remove_wishlist' product.id %}{% else %}{% url 'add_wishlist' product.id %}{% endif %}" class="{% if product.id in wishlist_items %} text-danger {% else %} text-warning {% endif %}"><i class="fa-solid fa-heart"></i></a>
+                        {% else %}
+                        {% comment %} <a href="{% if product.id in wishlist_items %}{% url 'login' %}?next={% url 'remove_wishlist' product.id %}{% else %}{% url 'login' %}?next={% url 'add_wishlist' product.id %}{% endif %}" class="{% if product.id in wishlist_items %} text-danger {% else %} text-warning {% endif %} "><i class="fa-solid fa-heart"></i></a> {% endcomment %}
+                        <button type="button" class="btn text-warning  open-login-modal" data-bs-toggle="modal" data-bs-target="#storewish" data-next = "{{ request.path }}">
+                            <i class="fa-solid fa-heart"></i>
+                            </button>
+                            <!-- Modal  -->
+                            <div class="modal fade m-5" id="storewish" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Please Login</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                <form method="POST" id="loginForm" action="{% url 'login' %}?next={{ request.path }}">
+                                    {% csrf_token %}
+                                    {% include 'alerts.html' %}
+
+                                    {% if form.errors %}
+                                    <div class="alert alert-danger ">
+                                        {% for field in form %}
+                                        {% for error in field.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                        {% endfor %}
+                                        {% for error in form.non_field_errors %}
+                                        <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+
+                                    <input type="hidden" name="next" value="" id="nextInput">
+                                    <div class="form-group">
+                                    <label for="phone" class="form-label ">Phone Number:</label>
+                                    <input type="text" id="phone" name="phone" class="form-control border border-warning" placeholder="Enter phone number" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                    <label for="password" class="form-label">Password:</label>
+                                    <input type="password" id="password" name="password" class="form-control border border-warning" placeholder="Password" required>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="{% url 'forgot_password' %}" class="pt-2">forgot password?</a>
+                                        <p class="pt-2">Not have an account ?<a href="{% url 'register' %}">register</a></p>
+                                    </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-orange w-100 mb-3 rounded">Login</button>
+                                </form>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        {% endif %}
                 </div>
             </div>
       <a href="{{ product.get_url }}"><img src="{{ product.image.url }}" alt="Sindhura 4pc" class="w-36 h-36 object-contain mb-4 hover:scale-105 transition-transform duration-300" /></a>
@@ -88,8 +142,66 @@
       <p class="text-orange-500 font-medium">{{ product.description}}/{{ product.Price }}</p>
       <div class="relative bottom-0 right-0 top-6  d-flex align-items-center justify-content-center">
           <div
-            class="p-2 mb-2 rounded bg-orange-500  ">
-            <a href="{% url 'add_cart' product.id %}" class="text-white text-xl text-decoration-none">Add Cart</a>
+            class="">
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'add_cart' product.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-warning m-5">Add Cart</button>
+                </form>
+            {% else %}
+                
+
+                <button type="button" class="btn btn-outline-warning mb-3 open-login-modal" data-bs-toggle="modal" data-bs-target="#storecart" data-next = "{{ request.path }}">
+                  Add Cart
+                </button>
+                <!-- Modal  -->
+                <div class="modal fade m-5" id="storecart" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Please Login</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                      <form method="POST" action="{% url 'login' %}?next={{ request.path }}">
+                        {% csrf_token %}
+                        {% include 'alerts.html' %}
+
+                        {% if form.errors %}
+                          <div class="alert alert-danger ">
+                            {% for field in form %}
+                              {% for error in field.errors %}
+                                <div>{{ error }}</div>
+                              {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                              <div>{{ error }}</div>
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+
+                        <input type="hidden" name="next" value="" id="nextInput">
+                        <div class="form-group">
+                          <label for="phone" class="form-label ">Phone Number:</label>
+                          <input type="text" id="phone" name="phone" class="form-control border border-warning" placeholder="Enter phone number" required>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="password" class="form-label">Password:</label>
+                          <input type="password" id="password" name="password" class="form-control border border-warning" placeholder="Password" required>
+                          <div class="d-flex justify-content-between">
+                            <a href="{% url 'forgot_password' %}" class="pt-2">forgot password?</a>
+                            <p class="pt-2">Not have an account ?<a href="{% url 'register' %}">register</a></p>
+                          </div>
+                        </div>
+                        <button type="submit" class="btn btn-orange w-100 mb-3 rounded">Login</button>
+                      </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+            {% endif %}
           </div>
         </div>
     </div>

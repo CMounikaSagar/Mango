@@ -1,5 +1,6 @@
 import requests
 from django.shortcuts import render,redirect,get_object_or_404
+# from django.utils.http import url_has_allowed_host_and_scheme
 from .models import *
 from mangoapp.models import *
 from cart.views import _cart_id
@@ -13,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 import random
 from django.conf import settings
-
+from .decorators import *
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -21,13 +22,14 @@ User = get_user_model()
 def index(request):
     return render(request,'index.html')
 
-
+@unauthenticated_user
 def login_user(request):
+    next_url = request.POST.get('next') or request.GET.get('next') or 'home'
+
     if request.method == 'POST':
         phone = request.POST.get('phone')
         password = request.POST.get('password')
 
-        # Check if phone number exists
         if not User.objects.filter(phone_number=phone).exists():
             messages.error(request, "Phone number not found. Please register.")
             return redirect('register')
@@ -35,12 +37,15 @@ def login_user(request):
         user = authenticate(request, username=phone, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')  # or your actual home route
+            print("GET next:", request.GET.get('next'))
+            print("POST next:", request.POST.get('next'))
+            # if next_url and url_has_allowed_host_and_scheme(next_url, settings.ALLOWED_HOSTS):
+            return redirect(next_url)
         else:
             messages.error(request, "Invalid phone number or password.")
-            return redirect('login')
-    return render(request, 'login.html')
+            return redirect(f"{reverse('login')}?next={next_url}")
 
+    return render(request, 'login.html', {'next': next_url})
 
 
 def register_user(request):
@@ -90,11 +95,13 @@ def logout_user(request):
 def editprofile(request):
     userprofile = get_object_or_404(User_Profile_Model,user = request.user)
     if request.method == 'POST':
+        print("FILES:", request.FILES)
         user_form = UserForm(request.POST,instance=request.user)
         profile_form = UserProfileForm(request.POST,request.FILES,instance=userprofile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+
             messages.success(request,'Your profile has been update')
             return redirect('edit_profile')
     else:
