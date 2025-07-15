@@ -63,8 +63,9 @@
                                     {% csrf_token %}
                                     <div class="form-row">
                                         <div class="col form-group col-md-6">
-                                            <label for="first_name">First_name</label>
-                                            <input class="form-control" name="first_name" type="text" placeholder="first_name" required>
+                                            <label class="fw-bold text-lg">First Name</label>
+                                            {% comment %} <input class="form-control" name="first_name" type="text" value="{{ first_name }}" required> {% endcomment %}
+                                            {{ user_form.first_name}}
                                         </div>
                                         <div class="col form-group col-md-6">
                                             <label for="first_name">Last_name</label>
@@ -143,8 +144,8 @@
                                         </td>
                                         <td>
                                             <div class="price-wrap">
-                                                <var class="price">${{ cart_item.sub_total}}</var>
-                                                <small class="text-muted"> ${{ cart_item.product.Price}} </small>
+                                                <var class="price">₹{{ cart_item.sub_total}}</var>
+                                                <small class="text-muted"> ₹{{ cart_item.product.Price}} </small>
                                             </div> <!-- price-wrap .// -->
                                         </td>
                                     </tr>

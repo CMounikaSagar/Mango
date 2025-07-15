@@ -112,7 +112,7 @@
 										<td>
 											<div class="price-wrap d-flex flex-column">
 												<var class="price">₹{{ cart_item.sub_total}}</var>
-												<small class="text-muted"> ₹{{ cart_item.product.Price}} </small>
+												
 											</div> <!-- price-wrap .// -->
 										</td>
 										<td class="text-right">
@@ -131,15 +131,15 @@
 
 						<div class="card">
 							<div class="card-body">
-								<dl class="dlist-align">
+								<dl class="dlist-align d-flex flex-row justify-content-between">
 									<dt>Total price:</dt>
-									<dd class="text-right">{{ total}}</dd>
+									<dd class="text-right ">{{ total}}</dd>
 								</dl>
-								<dl class="dlist-align">
+								<dl class="dlist-align d-flex flex-row justify-content-between">
 									<dt>Tax:</dt>
 									<dd class="text-right"> {{ tax }}</dd>
 								</dl>
-								<dl class="dlist-align">
+								<dl class="dlist-align d-flex flex-row justify-content-between">
 									<dt>Total:</dt>
 									<dd class="text-right text-dark b"><strong>{{ grand_total }}</strong></dd>
 								</dl>
@@ -148,7 +148,7 @@
 									<img src="{% static 'images/misc/payments.png' %}" height="26">
 								</p>
 
-								<a class="btn btn-primary btn-block" href="{% url 'checkout' %}"> Checkout </a>
+								<a class="btn btn-primary btn-block mb-3" href="{% url 'checkout' %}"> Checkout </a>
 								<a class="btn btn-light btn-block" href="{% url 'store' %}">Continue Shopping</a>
 							</div> <!-- card-body.// -->
 						</div> <!-- card.// -->

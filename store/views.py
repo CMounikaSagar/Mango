@@ -8,32 +8,46 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage,PageNotAnInteger,Paginator
 
 # Create your views here.
-def store(request,category_slug = None):
-    categories = None
-    products = None
-    wishlist_items=[]
+from django.core.paginator import Paginator
+from django.shortcuts import render, get_object_or_404
+from .models import Product, Category, Wishlist
+
+def store(request, category_slug=None):
+    colors = ["bg-orange-100", "bg-green-100", "bg-blue-100"]
+    wishlist_items = []
     
-    if category_slug != None:
-        categories = get_object_or_404(Category,slug=category_slug)
-        products = Product.objects.filter(category = categories,is_available = True)
-        product_count = Product.objects.count()
+    if category_slug:
+        category = get_object_or_404(Category, slug=category_slug)
+        products = Product.objects.filter(category=category, is_available=True)
+        product_count = products.count()
+
+        # Apply bg_color cyclically
+        for i, product in enumerate(products):
+            product.bg_color = colors[i % len(colors)]
+
+        paged_product = products  # No pagination for category filter
     else:
-        products = Product.objects.all().filter(is_available=True)
+        products = Product.objects.filter(is_available=True)
         paginator = Paginator(products, 8)
         page = request.GET.get('page')
         paged_product = paginator.get_page(page)
-        product_count = Product.objects.count()
-        colors = ["bg-orange-100", "bg-green-100", "bg-blue-100", "bg-yellow-100", "bg-pink-100","bg-red-100","bg-purple-100","bg-indigo-100"]
+        product_count = products.count()
+
+        # Apply bg_color to paginated products
+        for i, product in enumerate(paged_product):
+            product.bg_color = colors[i % len(colors)]
+
     if request.user.is_authenticated:
         wishlist_items = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
+
     context = {
-        'products':paged_product,
-        'product_count':product_count,
-        'colors':colors,
-        'wishlist_items':wishlist_items
-        
+        'products': paged_product,
+        'product_count': product_count,
+        'colors': colors,
+        'wishlist_items': wishlist_items
     }
-    return render(request,'store.html',context)
+
+    return render(request, 'store.html', context)
 
 def product_detail(request,category_slug,product_slug):
     try:
@@ -55,7 +69,7 @@ def search(request):
         if keyword:
             product = Product.objects.order_by('-created_date').filter(Q(Product_name__icontains = keyword) | Q(slug__icontains = keyword))
             product_count = Product.objects.count()
-            colors = ["bg-orange-100", "bg-green-100", "bg-blue-100", "bg-yellow-100", "bg-pink-100","bg-red-100","bg-purple-100","bg-indigo-100"]
+            colors = ["bg-orange-100", "bg-green-100", "bg-blue-100", "bg-yellow-100",]
             search_item= zip(product, colors * (len(product) // len(colors) + 1))
         if request.user.is_authenticated:
             wishlist_items = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
@@ -84,7 +98,7 @@ def remove_wishlist(request, product_id):
 def wishlist_view(request):
     wishlist_items = Wishlist.objects.filter(user=request.user)
     wishlist_count = Wishlist.objects.count()
-    colors = ["bg-orange-100", "bg-green-100", "bg-blue-100", "bg-yellow-100", "bg-pink-100","bg-red-100","bg-purple-100","bg-indigo-100"]
+    colors = ["bg-orange-100", "bg-green-100", "bg-blue-100", "bg-yellow-100"]
     wishlist_item= zip(wishlist_items, colors * (len(wishlist_items) // len(colors) + 1))
     context = {
         'wishlist_item':wishlist_item,

@@ -36,22 +36,29 @@
         .section-content.active {
             display: block;
         }
+		.header{
+			width: 85vw;
+			
+		}
     </style>
 </head>
 
 <body class="bg-gray-100 ">
     {% include 'nav.html' %}
     <section class="section-conten padding-y bg my-5">
+	<div class="d-flex justify-content-center mb-3">
+		<header class="card-header  text-center header">
+				<h2 class="d-inline-block mr-3 ">Login as:{{ user.first_name }}</h2>	
+		</header>
+	</div>
 
 <div class="container">
 	<div class="row">
+		
 	{% include 'dashboard_aside.html' %}
 	<main class="col-md-9">
 		<article class="card">
-		<header class="card-header">
-			<h2 class="d-inline-block mr-3">Login as:{{ user.first_name }}</h2>
-			
-		</header>
+		
 		<div class="card-body">
 			<div class="row"> 
 				<div class="col md-6 ">
@@ -65,10 +72,13 @@
 				</div>
 				<div class="col md-6 ">
 					<div class="card" >
-						<div class="card-body">
+						<div class="card-body d-flex flex-row-reverse justify-content-between">
 							<img src="{{ user_profile.profile_picture.url }}" class="w-25"/>
-							<p>{{ user.email }}</p>
-							<p>{{ user.phone_number }}</p>
+							<div>
+							<p><i class="fa-solid fa-envelope mr-2"></i>{{ user.email }}</p>
+							<p><i class="fa-solid fa-user mr-2"></i>{{ user.username }}</p>
+							<p><i class="fa-solid fa-phone mr-2"></i>{{ user.phone_number }}</p>
+							</div>
 						</div>
 					</div>
 				</div>
